@@ -39,12 +39,14 @@ defmodule LiveViewStudioWeb.LightLive do
 
   # Pattern matching for `handle_event` from `phx-click` binding
   def handle_event("off", _, socket) do
+    # `assign` sets the value to state.
     socket = assign(socket, brightness: 0)
 
     {:noreply, socket}
   end
 
   def handle_event("down", _, socket) do
+    # `update` sets the value to state, using the previous state value.
     socket = update(socket, :brightness, &(&1 - 10))
 
     {:noreply, socket}
