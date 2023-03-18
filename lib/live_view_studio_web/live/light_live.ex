@@ -21,7 +21,44 @@ defmodule LiveViewStudioWeb.LightLive do
           <%= @brightness %>%
         </span>
       </div>
+      <button phx-click="off">
+        <img src="/images/light-off.svg" alt="Light off" />
+      </button>
+      <button phx-click="down">
+        <img src="/images/down.svg" alt="Light down" />
+      </button>
+      <button phx-click="up">
+        <img src="/images/up.svg" alt="Light up" />
+      </button>
+      <button phx-click="on">
+        <img src="/images/light-on.svg" alt="Light on" />
+      </button>
     </div>
     """
+  end
+
+  # Pattern matching for `handle_event` from `phx-click` binding
+  def handle_event("off", _, socket) do
+    socket = assign(socket, brightness: 0)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("down", _, socket) do
+    socket = update(socket, :brightness, &(&1 - 10))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("up", _, socket) do
+    socket = update(socket, :brightness, &(&1 + 10))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("on", _, socket) do
+    socket = assign(socket, brightness: 100)
+
+    {:noreply, socket}
   end
 end
