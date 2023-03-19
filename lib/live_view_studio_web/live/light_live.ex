@@ -4,7 +4,13 @@ defmodule LiveViewStudioWeb.LightLive do
   # This happens on page mounts (starts)
   def mount(_params, _session, socket) do
     # LiveView states are stored in `socket`
-    socket = assign(socket, brightness: 10, brightness_slider: 10)
+    socket =
+      assign(
+        socket,
+        brightness: 10,
+        brightness_slider: 10,
+        temp: "3000"
+      )
 
     # should return this tuple
     {:ok, socket}
@@ -17,7 +23,10 @@ defmodule LiveViewStudioWeb.LightLive do
     <h1>Front Porch Light</h1>
     <div id="light">
       <div class="meter">
-        <span style={"width: #{@brightness}%"}>
+        <span style={"
+          width: #{@brightness}%;
+          background: #{temp_color(@temp)};
+        "}>
           <%= @brightness %>%
         </span>
       </div>
@@ -36,6 +45,22 @@ defmodule LiveViewStudioWeb.LightLive do
       <button phx-click="fire">
         <img src="/images/fire.svg" alt="Fire" />
       </button>
+      <form phx-change="change-temp">
+        <div class="temps">
+          <%= for temp <- ["3000", "4000", "5000"] do %>
+            <div>
+              <input
+                type="radio"
+                name="temp"
+                id={temp}
+                value={temp}
+                checked={temp == @temp}
+              />
+              <label for={temp}><%= temp %></label>
+            </div>
+          <% end %>
+        </div>
+      </form>
 
       <div class="mt-32">
         <form phx-change="slide-brightness">
@@ -92,4 +117,12 @@ defmodule LiveViewStudioWeb.LightLive do
 
     {:noreply, assign(socket, brightness_slider: String.to_integer(bs))}
   end
+
+  def handle_event("change-temp", %{"temp" => temp}, socket) do
+    {:noreply, assign(socket, temp: temp)}
+  end
+
+  defp temp_color("3000"), do: "#F1C40D"
+  defp temp_color("4000"), do: "#FEFF66"
+  defp temp_color("5000"), do: "#99CCFF"
 end
