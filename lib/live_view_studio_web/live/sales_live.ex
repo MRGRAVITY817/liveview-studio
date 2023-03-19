@@ -55,10 +55,12 @@ defmodule LiveViewStudioWeb.SalesLive do
     """
   end
 
+  # `handle_event` handles events from external source (e.g. user, browser, etc)
   def handle_event("refresh", _, socket) do
     {:noreply, assign_stats(socket)}
   end
 
+  # `handle_info` handles internal events, like process calls
   def handle_info(:tick, socket) do
     {:noreply, assign_stats(socket)}
   end
