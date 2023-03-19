@@ -5,7 +5,15 @@ defmodule LiveViewStudioWeb.SandboxLive do
   alias LiveViewStudio.Sandbox
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, length: "0", width: "0", depth: "0", weight: 0.0, price: nil)
+    socket =
+      assign(
+        socket,
+        length: "0",
+        width: "0",
+        depth: "0",
+        weight: 0.0,
+        price: nil
+      )
 
     {:ok, socket}
   end
@@ -14,7 +22,7 @@ defmodule LiveViewStudioWeb.SandboxLive do
     ~H"""
     <h1>Build A Sandbox</h1>
     <div id="sandbox">
-      <form phx-change="calculate">
+      <form phx-change="calculate" phx-submit="get-quote">
         <div class="fields">
           <div>
             <label for="length">Length</label>
@@ -54,10 +62,26 @@ defmodule LiveViewStudioWeb.SandboxLive do
     """
   end
 
+  def handle_event("get-quote", _, socket) do
+    price = Sandbox.calculate_price(socket.assigns.weight)
+
+    {:noreply, assign(socket, price: price)}
+  end
+
+  # `params` have form parameters.
   def handle_event("calculate", params, socket) do
     %{"length" => l, "width" => w, "depth" => d} = params
     weight = Sandbox.calculate_weight(l, w, d)
-    socket = assign(socket, length: l, width: w, depth: d, weight: weight)
+
+    socket =
+      assign(
+        socket,
+        length: l,
+        width: w,
+        depth: d,
+        weight: weight,
+        price: nil
+      )
 
     {:noreply, socket}
   end
