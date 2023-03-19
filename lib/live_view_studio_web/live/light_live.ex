@@ -4,7 +4,7 @@ defmodule LiveViewStudioWeb.LightLive do
   # This happens on page mounts (starts)
   def mount(_params, _session, socket) do
     # LiveView states are stored in `socket`
-    socket = assign(socket, brightness: 10)
+    socket = assign(socket, brightness: 10, brightness_slider: 10)
 
     # should return this tuple
     {:ok, socket}
@@ -36,6 +36,18 @@ defmodule LiveViewStudioWeb.LightLive do
       <button phx-click="fire">
         <img src="/images/fire.svg" alt="Fire" />
       </button>
+
+      <div class="mt-32">
+        <form phx-change="slide-brightness">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            name="brightness_slider"
+            value={@brightness_slider}
+          />
+        </form>
+      </div>
     </div>
     """
   end
@@ -73,5 +85,11 @@ defmodule LiveViewStudioWeb.LightLive do
     socket = assign(socket, :brightness, Enum.random(0..100))
 
     {:noreply, socket}
+  end
+
+  def handle_event("slide-brightness", params, socket) do
+    %{"brightness_slider" => bs} = params
+
+    {:noreply, assign(socket, brightness_slider: String.to_integer(bs))}
   end
 end
