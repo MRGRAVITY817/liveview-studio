@@ -4,6 +4,16 @@ defmodule LiveViewStudioWeb.SalesLive do
   alias LiveViewStudio.Sales
 
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      # send message
+      :timer.send_interval(
+        1000,
+        # `self()` == PID of current process
+        self(),
+        :tick
+      )
+    end
+
     {:ok, assign_stats(socket)}
   end
 
@@ -46,6 +56,10 @@ defmodule LiveViewStudioWeb.SalesLive do
   end
 
   def handle_event("refresh", _, socket) do
+    {:noreply, assign_stats(socket)}
+  end
+
+  def handle_info(:tick, socket) do
     {:noreply, assign_stats(socket)}
   end
 
