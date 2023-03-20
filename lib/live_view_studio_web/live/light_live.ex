@@ -70,6 +70,7 @@ defmodule LiveViewStudioWeb.LightLive do
             max="100"
             name="brightness_slider"
             value={@brightness_slider}
+            phx-debounce="250"
           />
         </form>
       </div>
