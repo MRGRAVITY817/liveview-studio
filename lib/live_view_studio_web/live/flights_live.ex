@@ -86,6 +86,12 @@ defmodule LiveViewStudioWeb.FlightsLive do
     {:noreply, socket}
   end
 
+  def handle_event("suggest", %{"airport" => prefix}, socket) do
+    matches = Airports.suggest(prefix)
+
+    {:noreply, assign(socket, matches: matches)}
+  end
+
   def handle_info({:run_search, airport}, socket) do
     socket =
       assign(
@@ -95,11 +101,5 @@ defmodule LiveViewStudioWeb.FlightsLive do
       )
 
     {:noreply, socket}
-  end
-
-  def handle_event("suggest", %{"airport" => prefix}, socket) do
-    matches = Airports.suggest(prefix)
-
-    {:noreply, assign(socket, matches: matches)}
   end
 end
