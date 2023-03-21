@@ -18,9 +18,6 @@ defmodule LiveViewStudioWeb.BoatsLive do
     <h1>Daily Boat Rentals</h1>
     <.promo expiration={2}>
       Save 25% on rentals!
-      <:legal>
-        <Heroicons.exclamation_circle /> Limit 1 per party
-      </:legal>
     </.promo>
     <div id="boats">
       <form phx-change="filter">
@@ -64,7 +61,7 @@ defmodule LiveViewStudioWeb.BoatsLive do
           </div>
         </div>
       </div>
-      <.promo expiration={1}>
+      <.promo>
         Hurry, only 3 boats left!
         <:legal>
           Excluding weekends
@@ -89,6 +86,10 @@ defmodule LiveViewStudioWeb.BoatsLive do
 
     {:noreply, assign(socket, boats: boats, filter: filter)}
   end
+
+  attr :expiration, :integer, default: 24
+  slot :legal
+  slot :inner_block, required: true
 
   def promo(assigns) do
     ~H"""
