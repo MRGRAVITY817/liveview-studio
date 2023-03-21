@@ -16,9 +16,11 @@ defmodule LiveViewStudioWeb.BoatsLive do
   def render(assigns) do
     ~H"""
     <h1>Daily Boat Rentals</h1>
-    <.promo>
+    <.promo expiration={2}>
       Save 25% on rentals!
-      <:legal>Limit 1 per party</:legal>
+      <:legal>
+        <Heroicons.exclamation_circle /> Limit 1 per party
+      </:legal>
     </.promo>
     <div id="boats">
       <form phx-change="filter">
@@ -44,12 +46,6 @@ defmodule LiveViewStudioWeb.BoatsLive do
           </div>
         </div>
       </form>
-      <.promo>
-        Hurry, only 3 boats left!
-        <:legal>
-          Excluding weekends
-        </:legal>
-      </.promo>
       <div class="boats">
         <div :for={boat <- @boats} class="boat">
           <img src={boat.image} />
@@ -68,6 +64,12 @@ defmodule LiveViewStudioWeb.BoatsLive do
           </div>
         </div>
       </div>
+      <.promo expiration={1}>
+        Hurry, only 3 boats left!
+        <:legal>
+          Excluding weekends
+        </:legal>
+      </.promo>
     </div>
     """
   end
@@ -94,6 +96,7 @@ defmodule LiveViewStudioWeb.BoatsLive do
       <div class="deal">
         <%= render_slot(@inner_block) %>
       </div>
+      <div class="expiration">Deal expires in <%= @expiration %></div>
       <div class="legal">
         <%= render_slot(@legal) %>
       </div>
