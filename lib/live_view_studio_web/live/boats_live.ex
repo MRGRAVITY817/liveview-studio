@@ -16,7 +16,7 @@ defmodule LiveViewStudioWeb.BoatsLive do
   def render(assigns) do
     ~H"""
     <h1>Daily Boat Rentals</h1>
-    <.promo expiration={2}>
+    <.promo expiration={2} minutes={33}>
       Save 25% on rentals!
     </.promo>
     <div id="boats">
@@ -24,7 +24,7 @@ defmodule LiveViewStudioWeb.BoatsLive do
       <div class="boats">
         <.boat :for={boat <- @boats} boat={boat} />
       </div>
-      <.promo>
+      <.promo minutes={11}>
         Hurry, only 3 boats left!
         <:legal>
           Excluding weekends
