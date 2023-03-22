@@ -41,7 +41,7 @@ defmodule LiveViewStudioWeb.VehiclesLive do
         </option>
       </datalist>
 
-      <div :if={@loading} class="loader">Loading...</div>
+      <.loading_indicator loading={@loading} />
 
       <div class="vehicles">
         <ul>
@@ -63,6 +63,8 @@ defmodule LiveViewStudioWeb.VehiclesLive do
   end
 
   def handle_info({:run_search, query}, socket) do
+    Process.sleep(1200)
+
     socket =
       assign(
         socket,
