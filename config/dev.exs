@@ -23,6 +23,7 @@ config :live_view_studio, LiveViewStudioWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
+  server: true,
   secret_key_base: "Gy3xNoXRI88VUQ53jb/SHMD1knd7eB+zIZ3jKFJoUiv4saUoYrdmXku9zURH+BDQ",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},

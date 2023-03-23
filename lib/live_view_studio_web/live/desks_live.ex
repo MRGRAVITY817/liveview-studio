@@ -9,11 +9,10 @@ defmodule LiveViewStudioWeb.DesksLive do
 
     socket =
       assign(socket,
-        desks: Desks.list_desks(),
         form: to_form(Desks.change_desk(%Desk{}))
       )
 
-    {:ok, socket}
+    {:ok, stream(socket, :desks, Desks.list_desks())}
   end
 
   def handle_event("validate", %{"desk" => params}, socket) do
@@ -37,7 +36,7 @@ defmodule LiveViewStudioWeb.DesksLive do
   end
 
   def handle_info({:desk_created, desk}, socket) do
-    {:noreply, stream_insert(socket, :desks, desk)}
+    {:noreply, stream_insert(socket, :desks, desk, at: 0)}
   end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do

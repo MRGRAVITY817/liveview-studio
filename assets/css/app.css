@@ -731,6 +731,9 @@ h3 {
 #desks #photos {
   @apply flex flex-wrap items-center justify-center sm:justify-start;
 }
+#desks #photos div[id^=desks-] {
+  @apply inline-flex;
+}
 #desks #photos .photo {
   @apply text-center p-4 m-4 border-2 border-slate-300 rounded-xl;
 }
