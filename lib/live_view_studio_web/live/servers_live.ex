@@ -18,7 +18,7 @@ defmodule LiveViewStudioWeb.ServersLive do
   # Automatically invoked after mount
   def handle_params(%{"id" => id}, _uri, socket) do
     server = Servers.get_server!(id)
-    {:noreply, assign(socket, selected_server: server)}
+    {:noreply, assign(socket, selected_server: server, page_title: "What's up")}
   end
 
   def handle_params(_, _uri, socket) do
@@ -74,7 +74,11 @@ defmodule LiveViewStudioWeb.ServersLive do
               </blockquote>
             </div>
           </div>
-          <div class="links"></div>
+          <div class="links">
+            <.link navigate={~p"/light"}>
+              Adjust Lights
+            </.link>
+          </div>
         </div>
       </div>
     </div>
