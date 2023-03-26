@@ -29,6 +29,16 @@ defmodule LiveViewStudioWeb.DonationsLive do
     {:noreply, socket}
   end
 
+  def sort_link(assigns) do
+    ~H"""
+    <.link patch={
+      ~p"/donations?#{%{sort_by: @sort_by, sort_order: next_sort_order(@options.sort_order)}}"
+    }>
+      <%= render_slot(@inner_block) %>
+    </.link>
+    """
+  end
+
   defp next_sort_order(sort_order) do
     case sort_order do
       :asc -> :desc
