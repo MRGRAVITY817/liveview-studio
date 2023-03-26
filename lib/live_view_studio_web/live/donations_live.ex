@@ -8,15 +8,8 @@ defmodule LiveViewStudioWeb.DonationsLive do
   end
 
   def handle_params(params, _uri, socket) do
-    # Since each sorting keys should be atoms,
-    # should convert string->atom
-    sort_by =
-      (params["sort_by"] || "id")
-      |> String.to_atom()
-
-    sort_order =
-      (params["sort_order"] || "asc")
-      |> String.to_atom()
+    sort_by = valid_sort_by(params)
+    sort_order = valid_sort_order(params)
 
     options = %{
       sort_by: sort_by,
@@ -60,4 +53,23 @@ defmodule LiveViewStudioWeb.DonationsLive do
   end
 
   defp sort_indicator(_, _), do: ""
+
+  defp valid_sort_by(%{"sort_by" => sort_by})
+       when sort_by in ~w(item quantity days_until_expires) do
+    # Since the number of atom is limited per program,
+    # we need to make exception error when user is making too much atoms.
+    # ex) DDOS attack
+    String.to_existing_atom(sort_by)
+  end
+
+  # If the route param isn't one of [item quantity days_until_expires],
+  # just sort it by row id.
+  defp valid_sort_by(_params), do: :id
+
+  defp valid_sort_order(%{"sort_order" => sort_order})
+       when sort_order in ~w(asc desc) do
+    String.to_existing_atom(sort_order)
+  end
+
+  defp valid_sort_order(_params), do: :asc
 end
