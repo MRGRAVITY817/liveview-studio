@@ -1,6 +1,5 @@
 defmodule LiveViewStudioWeb.DonationsLive do
   use LiveViewStudioWeb, :live_view
-
   alias LiveViewStudio.Donations
 
   def mount(_params, _session, socket) do
@@ -20,6 +19,7 @@ defmodule LiveViewStudioWeb.DonationsLive do
 
     page = param_to_integer(params["page"], 1)
     per_page = param_to_integer(params["per_page"], 5)
+    donation_count = Donations.count_donations()
 
     options = %{
       sort_by: sort_by,
@@ -30,8 +30,19 @@ defmodule LiveViewStudioWeb.DonationsLive do
 
     donations = Donations.list_donations(options)
 
-    socket = assign(socket, donations: donations, options: options)
+    socket =
+      assign(
+        socket,
+        donations: donations,
+        options: options,
+        donation_count: donation_count
+      )
+
     {:noreply, socket}
+  end
+
+  defp more_pages?(options, donation_count) do
+    options.page * options.per_page < donation_count
   end
 
   def handle_event("select-per-page", %{"per-page" => per_page}, socket) do
