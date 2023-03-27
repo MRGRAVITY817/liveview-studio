@@ -12,7 +12,7 @@ defmodule LiveViewStudioWeb.DonationsLive do
     sort_order = valid_sort_order(params)
 
     page = (params["page"] || "1") |> String.to_integer()
-    per_page = (params["per_page"] || "1") |> String.to_integer()
+    per_page = (params["per_page"] || "5") |> String.to_integer()
 
     options = %{
       sort_by: sort_by,
