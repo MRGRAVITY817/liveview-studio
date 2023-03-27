@@ -45,6 +45,18 @@ defmodule LiveViewStudioWeb.DonationsLive do
     options.page * options.per_page < donation_count
   end
 
+  defp pages(options, donation_count) do
+    page_count = ceil(donation_count / options.per_page)
+
+    for page_number <- (options.page - 2)..(options.page + 2),
+        page_number > 0 do
+      if page_number <= page_count do
+        current_page? = page_number == options.page
+        {page_number, current_page?}
+      end
+    end
+  end
+
   def handle_event("select-per-page", %{"per-page" => per_page}, socket) do
     params = %{socket.assigns.options | per_page: per_page}
 
