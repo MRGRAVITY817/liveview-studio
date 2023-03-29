@@ -2,14 +2,17 @@ defmodule LiveViewStudioWeb.ServersLive do
   use LiveViewStudioWeb, :live_view
 
   alias LiveViewStudio.Servers
+  alias LiveViewStudio.Servers.Server
 
   def mount(_params, _session, socket) do
     servers = Servers.list_servers()
+    changeset = Servers.change_server(%Server{})
 
     socket =
       assign(socket,
         servers: servers,
-        coffees: 0
+        coffees: 0,
+        form: to_form(changeset)
       )
 
     {:ok, socket}
