@@ -18,5 +18,6 @@ defmodule LiveViewStudio.Servers.Server do
     server
     |> cast(attrs, [:name, :status, :deploy_count, :size, :framework, :last_commit_message])
     |> validate_required([:name, :status, :deploy_count, :size, :framework, :last_commit_message])
+    |> validate_length(:name, min: 3, max: 12)
   end
 end
