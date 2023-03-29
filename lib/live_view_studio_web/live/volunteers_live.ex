@@ -11,6 +11,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     socket =
       assign(socket,
         volunteers: volunteers,
+        # use `to_form()` to handle HTMl form
         form: to_form(changeset)
       )
 
@@ -53,16 +54,20 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     """
   end
 
+  defp assign_form(socket, %Ecto.Changeset{} = changeset) do
+    assign(socket, :form, to_form(changeset))
+  end
+
   def handle_event("save", %{"volunteer" => volunteer_params}, socket) do
     case Volunteers.create_volunteer(volunteer_params) do
       {:ok, volunteer} ->
         socket = update(socket, :volunteers, fn volunteers -> [volunteer | volunteers] end)
         # Clear the form with empty changeset
         changeset = Volunteers.change_volunteer(%Volunteer{})
-        {:noreply, assign(socket, :form, to_form(changeset))}
+        {:noreply, assign_form(socket, changeset)}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :form, to_form(changeset))}
+        {:noreply, assign_form(socket, changeset)}
     end
   end
 end
