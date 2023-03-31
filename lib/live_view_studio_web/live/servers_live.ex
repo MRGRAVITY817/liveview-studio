@@ -24,8 +24,25 @@ defmodule LiveViewStudioWeb.ServersLive do
     {:noreply, assign(socket, selected_server: server, page_title: "What's up")}
   end
 
+  # Invoked when params = :new
   def handle_params(_, _uri, socket) do
-    {:noreply, assign(socket, selected_server: hd(socket.assigns.servers))}
+    socket =
+      if socket.assigns.live_action == :new do
+        changeset = Servers.change_server(%Server{})
+
+        assign(
+          socket,
+          selected_server: nil,
+          form: to_form(changeset)
+        )
+      else
+        assign(
+          socket,
+          selected_server: hd(socket.assigns.servers)
+        )
+      end
+
+    {:noreply, socket}
   end
 
   def render(assigns) do
