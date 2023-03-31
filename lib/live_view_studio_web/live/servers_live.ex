@@ -52,25 +52,28 @@ defmodule LiveViewStudioWeb.ServersLive do
       </div>
       <div class="main">
         <div class="wrapper">
-          <.form for={@form} phx-submit="save">
-            <div class="field">
-              <.input field={@form[:name]} placeholder="Server Name" />
-            </div>
-            <div class="field">
-              <.input field={@form[:framework]} placeholder="Framework" />
-            </div>
-            <div class="field">
-              <.input
-                field={@form[:size]}
-                type="number"
-                placeholder="Size (MB)"
-              />
-            </div>
-            <.button phx-disable-with="Saving...">
-              Create Server
-            </.button>
-          </.form>
-          <.server server={@selected_server} />
+          <%= if @live_action == :new do %>
+            <.form for={@form} phx-submit="save">
+              <div class="field">
+                <.input field={@form[:name]} placeholder="Server Name" />
+              </div>
+              <div class="field">
+                <.input field={@form[:framework]} placeholder="Framework" />
+              </div>
+              <div class="field">
+                <.input
+                  field={@form[:size]}
+                  type="number"
+                  placeholder="Size (MB)"
+                />
+              </div>
+              <.button phx-disable-with="Saving...">
+                Create Server
+              </.button>
+            </.form>
+          <% else %>
+            <.server server={@selected_server} />
+          <% end %>
           <div class="links">
             <.link navigate={~p"/light"}>
               Adjust Lights
