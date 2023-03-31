@@ -34,6 +34,9 @@ defmodule LiveViewStudioWeb.ServersLive do
     <div id="servers">
       <div class="sidebar">
         <div class="nav">
+          <.link patch={~p"/servers/new"} class="add">
+            + Add New Server
+          </.link>
           <.link
             :for={server <- @servers}
             patch={~p"/servers/#{server}"}
