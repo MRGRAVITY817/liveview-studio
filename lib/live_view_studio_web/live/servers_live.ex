@@ -73,27 +73,7 @@ defmodule LiveViewStudioWeb.ServersLive do
       <div class="main">
         <div class="wrapper">
           <%= if @live_action == :new do %>
-            <.form for={@form} phx-submit="save">
-              <div class="field">
-                <.input field={@form[:name]} placeholder="Server Name" />
-              </div>
-              <div class="field">
-                <.input field={@form[:framework]} placeholder="Framework" />
-              </div>
-              <div class="field">
-                <.input
-                  field={@form[:size]}
-                  type="number"
-                  placeholder="Size (MB)"
-                />
-              </div>
-              <.button phx-disable-with="Saving...">
-                Save
-              </.button>
-              <.link class="cancel" patch={~p"/servers"}>
-                Cancel
-              </.link>
-            </.form>
+            <.new_server form={@form} />
           <% else %>
             <.server server={@selected_server} />
           <% end %>
@@ -105,6 +85,30 @@ defmodule LiveViewStudioWeb.ServersLive do
         </div>
       </div>
     </div>
+    """
+  end
+
+  attr :form, :map, required: true
+
+  def new_server(assigns) do
+    ~H"""
+    <.form for={@form} phx-submit="save">
+      <div class="field">
+        <.input field={@form[:name]} placeholder="Server Name" />
+      </div>
+      <div class="field">
+        <.input field={@form[:framework]} placeholder="Framework" />
+      </div>
+      <div class="field">
+        <.input field={@form[:size]} type="number" placeholder="Size (MB)" />
+      </div>
+      <.button phx-disable-with="Saving...">
+        Save
+      </.button>
+      <.link class="cancel" patch={~p"/servers"}>
+        Cancel
+      </.link>
+    </.form>
     """
   end
 
