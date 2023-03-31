@@ -71,8 +71,11 @@ defmodule LiveViewStudioWeb.ServersLive do
                 />
               </div>
               <.button phx-disable-with="Saving...">
-                Create Server
+                Save
               </.button>
+              <.link class="cancel" patch={~p"/servers"}>
+                Cancel
+              </.link>
             </.form>
           <% else %>
             <.server server={@selected_server} />
