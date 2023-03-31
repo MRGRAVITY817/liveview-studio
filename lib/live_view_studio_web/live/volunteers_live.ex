@@ -22,7 +22,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     ~H"""
     <h1>Volunteer Check-In</h1>
     <div id="volunteer-checkin">
-      <.form for={@form} phx-submit="save">
+      <.form for={@form} phx-submit="save" phx-change="validate">
         <.input field={@form[:name]} placeholder="Name" autocomplete="off" />
         <.input
           field={@form[:phone]}
@@ -71,5 +71,14 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         socket = put_flash(socket, :error, "Failed to check in.")
         {:noreply, assign_form(socket, changeset)}
     end
+  end
+
+  def handle_event("validate", %{"volunteer" => volunteer_params}, socket) do
+    changeset =
+      %Volunteer{}
+      |> Volunteers.change_volunteer(volunteer_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, form: to_form(changeset))}
   end
 end
