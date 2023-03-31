@@ -135,7 +135,7 @@ defmodule LiveViewStudioWeb.ServersLive do
           )
 
         changeset = Servers.change_server(%Server{})
-
+        socket = push_patch(socket, to: ~p"/servers/#{server.id}")
         {:noreply, assign(socket, :form, to_form(changeset))}
 
       {:error, changeset} ->
