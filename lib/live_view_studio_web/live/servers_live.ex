@@ -94,7 +94,11 @@ defmodule LiveViewStudioWeb.ServersLive do
     ~H"""
     <.form for={@form} phx-submit="save" phx-change="validate">
       <div class="field">
-        <.input field={@form[:name]} placeholder="Server Name" />
+        <.input
+          field={@form[:name]}
+          placeholder="Server Name"
+          phx-debounce="200"
+        />
       </div>
       <div class="field">
         <.input field={@form[:framework]} placeholder="Framework" />
