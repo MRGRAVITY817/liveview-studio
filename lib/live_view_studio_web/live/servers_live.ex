@@ -92,7 +92,7 @@ defmodule LiveViewStudioWeb.ServersLive do
 
   def new_server(assigns) do
     ~H"""
-    <.form for={@form} phx-submit="save">
+    <.form for={@form} phx-submit="save" phx-change="validate">
       <div class="field">
         <.input field={@form[:name]} placeholder="Server Name" />
       </div>
@@ -142,6 +142,15 @@ defmodule LiveViewStudioWeb.ServersLive do
       </div>
     </div>
     """
+  end
+
+  def handle_event("validate", %{"server" => server_params}, socket) do
+    changeset =
+      %Server{}
+      |> Servers.change_server(server_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, form: to_form(changeset))}
   end
 
   def handle_event("drink", _, socket) do
