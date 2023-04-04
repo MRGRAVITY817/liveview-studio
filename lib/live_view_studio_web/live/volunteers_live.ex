@@ -2,16 +2,14 @@ defmodule LiveViewStudioWeb.VolunteersLive do
   use LiveViewStudioWeb, :live_view
 
   alias LiveViewStudio.Volunteers
-  alias LiveViewStudio.Volunteers.Volunteer
+  alias LiveViewStudioWeb.VolunteerFormComponent
 
   def mount(_params, _session, socket) do
     volunteers = Volunteers.list_volunteers()
-    changeset = Volunteers.change_volunteer(%Volunteer{})
 
     socket =
       socket
       |> stream(:volunteers, volunteers)
-      |> assign(:form, to_form(changeset))
 
     {:ok, socket}
   end
@@ -20,7 +18,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     ~H"""
     <h1>Volunteer Check-In</h1>
     <div id="volunteer-checkin">
-      <.volunteer_form form={@form} />
+      <.live_component module={VolunteerFormComponent} id={:new} />
       <div id="volunteers" phx-update="stream">
         <.volunteer
           :for={{volunteer_id, volunteer} <- @streams.volunteers}
@@ -29,29 +27,6 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         />
       </div>
     </div>
-    """
-  end
-
-  def volunteer_form(assigns) do
-    ~H"""
-    <.form for={@form} phx-submit="save" phx-change="validate">
-      <.input
-        field={@form[:name]}
-        placeholder="Name"
-        autocomplete="off"
-        phx-debounce="200"
-      />
-      <.input
-        field={@form[:phone]}
-        type="tel"
-        placeholder="Phone"
-        autocomplete="off"
-        phx-debounce="blur"
-      />
-      <.button phx-disable-with="Saving...">
-        Check In
-      </.button>
-    </.form>
     """
   end
 
@@ -86,10 +61,6 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     """
   end
 
-  defp assign_form(socket, %Ecto.Changeset{} = changeset) do
-    assign(socket, :form, to_form(changeset))
-  end
-
   def handle_event("delete", %{"id" => id}, socket) do
     volunteer = Volunteers.get_volunteer!(id)
     {:ok, _} = Volunteers.delete_volunteer(volunteer)
@@ -104,27 +75,10 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     {:noreply, stream_insert(socket, :volunteers, volunteer)}
   end
 
-  def handle_event("save", %{"volunteer" => volunteer_params}, socket) do
-    case Volunteers.create_volunteer(volunteer_params) do
-      {:ok, volunteer} ->
-        socket = stream_insert(socket, :volunteers, volunteer, at: 0)
-        socket = put_flash(socket, :info, "Volunteer successfully checked in!")
-        # Clear the form with empty changeset
-        changeset = Volunteers.change_volunteer(%Volunteer{})
-        {:noreply, assign_form(socket, changeset)}
+  def handle_info({:volunteer_created, volunteer}, socket) do
+    socket = stream_insert(socket, :volunteers, volunteer, at: 0)
+    socket = put_flash(socket, :info, "Volunteer successfully checked in!")
 
-      {:error, changeset} ->
-        socket = put_flash(socket, :error, "Failed to check in.")
-        {:noreply, assign_form(socket, changeset)}
-    end
-  end
-
-  def handle_event("validate", %{"volunteer" => volunteer_params}, socket) do
-    changeset =
-      %Volunteer{}
-      |> Volunteers.change_volunteer(volunteer_params)
-      |> Map.put(:action, :validate)
-
-    {:noreply, assign(socket, form: to_form(changeset))}
+    {:noreply, socket}
   end
 end
