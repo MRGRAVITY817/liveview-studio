@@ -39,33 +39,42 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         </.button>
       </.form>
       <div id="volunteers" phx-update="stream">
-        <div
+        <.volunteer
           :for={{volunteer_id, volunteer} <- @streams.volunteers}
-          class={"volunteer #{if volunteer.checked_out, do: "out"}"}
+          volunteer={volunteer}
           id={volunteer_id}
+        />
+      </div>
+    </div>
+    """
+  end
+
+  def volunteer(assigns) do
+    ~H"""
+    <div
+      class={"volunteer #{if @volunteer.checked_out, do: "out"}"}
+      id={@id}
+    >
+      <div class="name">
+        <%= @volunteer.name %>
+      </div>
+      <div class="phone">
+        <%= @volunteer.phone %>
+      </div>
+      <div class="status">
+        <button phx-click="toggle-status" phx-value-id={@id}>
+          <%= if @volunteer.checked_out,
+            do: "Check In",
+            else: "Check Out" %>
+        </button>
+        <.link
+          class="delete"
+          phx-click="delete"
+          phx-value-id={@id}
+          data-confirm="Are you sure?"
         >
-          <div class="name">
-            <%= volunteer.name %>
-          </div>
-          <div class="phone">
-            <%= volunteer.phone %>
-          </div>
-          <div class="status">
-            <button phx-click="toggle-status" phx-value-id={volunteer.id}>
-              <%= if volunteer.checked_out,
-                do: "Check In",
-                else: "Check Out" %>
-            </button>
-            <.link
-              class="delete"
-              phx-click="delete"
-              phx-value-id={volunteer.id}
-              data-confirm="Are you sure?"
-            >
-              <.icon name="hero-trash-solid" />
-            </.link>
-          </div>
-        </div>
+          <.icon name="hero-trash-solid" />
+        </.link>
       </div>
     </div>
     """
