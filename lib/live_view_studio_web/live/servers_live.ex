@@ -158,7 +158,13 @@ defmodule LiveViewStudioWeb.ServersLive do
 
     {:ok, server} = Servers.update_server(server, %{status: new_status})
 
-    {:noreply, assign(socket, selected_server: server)}
+    servers =
+      Enum.map(
+        socket.assigns.servers,
+        fn s -> if s.id == server.id, do: server, else: s end
+      )
+
+    {:noreply, assign(socket, selected_server: server, servers: servers)}
   end
 
   def handle_event("validate", %{"server" => server_params}, socket) do
