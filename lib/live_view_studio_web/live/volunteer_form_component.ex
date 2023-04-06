@@ -5,17 +5,31 @@ defmodule LiveViewStudioWeb.VolunteerFormComponent do
   alias LiveViewStudio.Volunteers
   alias LiveViewStudio.Volunteers.Volunteer
 
+  # Live components are _stateful_ components.
+  # Function components are _stateless_ components.
+
   # `mount()` in live component has only one param - `socket`
+  # This is run only once, unlike function component - or else it will lose state.
   def mount(socket) do
     changeset = Volunteers.change_volunteer(%Volunteer{})
     {:ok, assign(socket, :form, to_form(changeset))}
+  end
+
+  # `update()` happens between `mount()` and `render()`
+  def update(assigns, socket) do
+    socket =
+      socket
+      |> assign(assigns)
+      |> assign(:count, assigns.count + 1)
+
+    {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
     <div>
       <div class="count">
-        Go for it! You'll be volunteer #<%= @count + 1 %>
+        Go for it! You'll be volunteer #<%= @count %>
       </div>
       <.form
         for={@form}
