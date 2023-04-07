@@ -131,15 +131,6 @@ defmodule LiveViewStudioWeb.ServersLive do
     {:noreply, assign(socket, selected_server: server, servers: servers)}
   end
 
-  def handle_event("validate", %{"server" => server_params}, socket) do
-    changeset =
-      %Server{}
-      |> Servers.change_server(server_params)
-      |> Map.put(:action, :validate)
-
-    {:noreply, assign(socket, form: to_form(changeset))}
-  end
-
   def handle_event("drink", _, socket) do
     {:noreply, update(socket, :coffees, &(&1 + 1))}
   end

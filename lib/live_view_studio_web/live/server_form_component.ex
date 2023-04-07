@@ -57,4 +57,13 @@ defmodule LiveViewStudioWeb.ServerFormComponent do
         {:noreply, assign(socket, :form, to_form(changeset))}
     end
   end
+
+  def handle_event("validate", %{"server" => server_params}, socket) do
+    changeset =
+      %Server{}
+      |> Servers.change_server(server_params)
+      |> Map.put(:action, :validate)
+
+    {:noreply, assign(socket, form: to_form(changeset))}
+  end
 end
