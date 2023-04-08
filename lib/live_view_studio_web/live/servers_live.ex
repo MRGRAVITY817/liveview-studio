@@ -147,7 +147,6 @@ defmodule LiveViewStudioWeb.ServersLive do
         fn servers -> [server | servers] end
       )
 
-    socket = push_patch(socket, to: ~p"/servers/#{server.id}")
     {:noreply, socket}
   end
 end
