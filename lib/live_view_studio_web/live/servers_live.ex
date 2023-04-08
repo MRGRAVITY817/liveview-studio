@@ -140,6 +140,8 @@ defmodule LiveViewStudioWeb.ServersLive do
   end
 
   def handle_info({:server_created, server}, socket) do
+    socket = put_flash(socket, :info, "Server #{server.name} created!")
+
     socket =
       update(
         socket,
