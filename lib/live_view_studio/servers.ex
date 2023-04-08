@@ -4,7 +4,7 @@ defmodule LiveViewStudio.Servers do
   """
 
   @topic inspect(__MODULE__)
-  @pubsub LiveViewStudioWeb.PubSub
+  @pubsub LiveViewStudio.PubSub
 
   import Ecto.Query, warn: false
   alias LiveViewStudio.Repo
@@ -68,6 +68,7 @@ defmodule LiveViewStudio.Servers do
     %Server{}
     |> Server.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:server_created)
   end
 
   @doc """
