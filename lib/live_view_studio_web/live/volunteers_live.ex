@@ -75,7 +75,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     volunteer = Volunteers.get_volunteer!(id)
     {:ok, _} = Volunteers.delete_volunteer(volunteer)
 
-    {:noreply, stream_delete(socket, :volunteers, volunteer)}
+    {:noreply, socket}
   end
 
   def handle_event("toggle-status", %{"id" => id}, socket) do
@@ -95,5 +95,10 @@ defmodule LiveViewStudioWeb.VolunteersLive do
 
   def handle_info({:volunteer_updated, volunteer}, socket) do
     {:noreply, stream_insert(socket, :volunteers, volunteer)}
+  end
+
+  def handle_info({:volunteer_deleted, volunteer}, socket) do
+    socket = update(socket, :count, &(&1 - 1))
+    {:noreply, stream_delete(socket, :volunteers, volunteer)}
   end
 end
