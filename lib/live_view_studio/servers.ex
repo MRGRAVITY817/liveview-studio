@@ -3,10 +3,25 @@ defmodule LiveViewStudio.Servers do
   The Servers context.
   """
 
+  @topic inspect(__MODULE__)
+  @pubsub LiveViewStudioWeb.PubSub
+
   import Ecto.Query, warn: false
   alias LiveViewStudio.Repo
 
   alias LiveViewStudio.Servers.Server
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(@pubsub, @topic)
+  end
+
+  def broadcast({:ok, server}, tag) do
+    Phoenix.PubSub.broadcast(@pubsub, @topic, {tag, server})
+
+    {:ok, server}
+  end
+
+  def broadcast({:error, _changeset} = error, _tag), do: error
 
   @doc """
   Returns the list of servers.
