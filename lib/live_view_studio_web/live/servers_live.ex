@@ -124,15 +124,9 @@ defmodule LiveViewStudioWeb.ServersLive do
     server = Servers.get_server!(id)
     new_status = if server.status == "up", do: "down", else: "up"
 
-    {:ok, server} = Servers.update_server(server, %{status: new_status})
+    {:ok, _server} = Servers.update_server(server, %{status: new_status})
 
-    servers =
-      Enum.map(
-        socket.assigns.servers,
-        fn s -> if s.id == server.id, do: server, else: s end
-      )
-
-    {:noreply, assign(socket, selected_server: server, servers: servers)}
+    {:noreply, socket}
   end
 
   def handle_event("drink", _, socket) do
@@ -149,6 +143,17 @@ defmodule LiveViewStudioWeb.ServersLive do
         fn servers -> [server | servers] end
       )
 
+    {:noreply, socket}
+  end
+
+  def handle_info({:server_updated, server}, socket) do
+    servers =
+      Enum.map(
+        socket.assigns.servers,
+        fn s -> if s.id == server.id, do: server, else: s end
+      )
+
+    socket = assign(socket, selected_server: server, servers: servers)
     {:noreply, socket}
   end
 end
