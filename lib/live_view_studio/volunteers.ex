@@ -81,9 +81,14 @@ defmodule LiveViewStudio.Volunteers do
 
   """
   def update_volunteer(%Volunteer{} = volunteer, attrs) do
-    volunteer
-    |> Volunteer.changeset(attrs)
-    |> Repo.update()
+    {:ok, volunteer} =
+      volunteer
+      |> Volunteer.changeset(attrs)
+      |> Repo.update()
+
+    broadcast({:volunteer_updated, volunteer})
+
+    {:ok, volunteer}
   end
 
   @doc """

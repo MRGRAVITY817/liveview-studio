@@ -53,7 +53,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         <%= @volunteer.phone %>
       </div>
       <div class="status">
-        <button phx-click="toggle-status" phx-value-id={@id}>
+        <button phx-click="toggle-status" phx-value-id={@volunteer.id}>
           <%= if @volunteer.checked_out,
             do: "Check In",
             else: "Check Out" %>
@@ -61,7 +61,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         <.link
           class="delete"
           phx-click="delete"
-          phx-value-id={@id}
+          phx-value-id={@volunteer.id}
           data-confirm="Are you sure?"
         >
           <.icon name="hero-trash-solid" />
@@ -80,9 +80,9 @@ defmodule LiveViewStudioWeb.VolunteersLive do
 
   def handle_event("toggle-status", %{"id" => id}, socket) do
     volunteer = Volunteers.get_volunteer!(id)
-    {:ok, volunteer} = Volunteers.toggle_status_volunteer(volunteer)
+    {:ok, _volunteer} = Volunteers.toggle_status_volunteer(volunteer)
 
-    {:noreply, stream_insert(socket, :volunteers, volunteer)}
+    {:noreply, socket}
   end
 
   def handle_info({:volunteer_created, volunteer}, socket) do
@@ -91,5 +91,9 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     socket = put_flash(socket, :info, "Volunteer successfully checked in!")
 
     {:noreply, socket}
+  end
+
+  def handle_info({:volunteer_updated, volunteer}, socket) do
+    {:noreply, stream_insert(socket, :volunteers, volunteer)}
   end
 end
