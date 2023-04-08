@@ -124,7 +124,8 @@ defmodule LiveViewStudioWeb.ServersLive do
     server = Servers.get_server!(id)
     new_status = if server.status == "up", do: "down", else: "up"
 
-    {:ok, _server} = Servers.update_server(server, %{status: new_status})
+    {:ok, server} = Servers.update_server(server, %{status: new_status})
+    socket = push_patch(socket, to: ~p"/servers/#{server.id}")
 
     {:noreply, socket}
   end
@@ -153,7 +154,7 @@ defmodule LiveViewStudioWeb.ServersLive do
         fn s -> if s.id == server.id, do: server, else: s end
       )
 
-    socket = assign(socket, selected_server: server, servers: servers)
+    socket = assign(socket, servers: servers)
     {:noreply, socket}
   end
 end
