@@ -1,23 +1,21 @@
 defmodule LiveViewStudio.Volunteers do
+  @topic inspect(__MODULE__)
+  @pubsub LiveViewStudio.PubSub
+
   @moduledoc """
   The Volunteers context.
   """
 
   import Ecto.Query, warn: false
   alias LiveViewStudio.Repo
-
   alias LiveViewStudio.Volunteers.Volunteer
 
   def subscribe do
-    Phoenix.PubSub.subscribe(LiveViewStudio.PubSub, "volunteers")
+    Phoenix.PubSub.subscribe(@pubsub, @topic)
   end
 
   def broadcast({:ok, volunteer}, tag) do
-    Phoenix.PubSub.broadcast(
-      LiveViewStudio.PubSub,
-      "volunteers",
-      {tag, volunteer}
-    )
+    Phoenix.PubSub.broadcast(@pubsub, @topic, {tag, volunteer})
 
     {:ok, volunteer}
   end
