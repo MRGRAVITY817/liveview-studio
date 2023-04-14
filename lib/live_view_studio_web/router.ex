@@ -21,6 +21,8 @@ defmodule LiveViewStudioWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :authenticated,
+      # Redirection is done via websocket, which means it doesn't reloads the page, and check auth on mount.
+      # We should do manual check using `on_mount()` hook when this page is reached from websocket.
       on_mount: {LiveViewStudioWeb.UserAuth, :ensure_authenticated} do
       live "/topsecret", TopSecretLive
       live "/presence", PresenceLive

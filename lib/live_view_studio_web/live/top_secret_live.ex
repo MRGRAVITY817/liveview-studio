@@ -1,9 +1,6 @@
 defmodule LiveViewStudioWeb.TopSecretLive do
   use LiveViewStudioWeb, :live_view
 
-  # Redirection is done via websocket, which means it doesn't go through router pipeline.
-  # We should do manual check using `on_mount()` hook when this page is reached from websocket.
-
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
