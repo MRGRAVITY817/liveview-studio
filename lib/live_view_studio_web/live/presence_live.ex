@@ -21,9 +21,17 @@ defmodule LiveViewStudioWeb.PresenceLive do
     socket =
       socket
       |> assign(:is_playing, false)
-      |> assign(:presences, presences)
+      |> assign(:presences, simple_presence_map(presences))
 
     {:ok, socket}
+  end
+
+  def simple_presence_map(presences) do
+    Enum.into(
+      presences,
+      %{},
+      fn {user_id, %{metas: [meta | _]}} -> {user_id, meta} end
+    )
   end
 
   def render(assigns) do
