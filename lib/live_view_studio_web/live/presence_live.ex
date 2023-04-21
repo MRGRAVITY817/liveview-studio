@@ -36,13 +36,17 @@ defmodule LiveViewStudioWeb.PresenceLive do
 
   def render(assigns) do
     ~H"""
-    <pre>
-    <%= inspect(@presences, pretty: true) %>
-    </pre>
     <div id="presence">
       <div class="users">
         <h2>Who's Here?</h2>
-        <ul></ul>
+        <ul>
+          <li :for={{_user_id, meta} <- @presences}>
+            <span>
+              <%= if meta.is_playing, do: "👀", else: "🙈" %>
+            </span>
+            <span class="username"><%= meta.username %></span>
+          </li>
+        </ul>
       </div>
       <div class="video" phx-click="toggle-playing">
         <%= if @is_playing do %>
