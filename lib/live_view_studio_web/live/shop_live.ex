@@ -2,6 +2,7 @@ defmodule LiveViewStudioWeb.ShopLive do
   use LiveViewStudioWeb, :live_view
 
   alias LiveViewStudio.Products
+  alias Phoenix.LiveView.JS
 
   def mount(_params, _session, socket) do
     {:ok,
