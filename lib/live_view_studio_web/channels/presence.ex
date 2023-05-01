@@ -8,4 +8,19 @@ defmodule LiveViewStudioWeb.Presence do
   use Phoenix.Presence,
     otp_app: :live_view_studio,
     pubsub_server: LiveViewStudio.PubSub
+
+  def track_user(current_user, topic, meta) do
+    Phoenix.PubSub.subscribe(LiveViewStudio.PubSub, topic)
+    # track current process(= user)
+    {:ok, _} =
+      track(
+        self(),
+        topic,
+        current_user.id,
+        Map.merge(
+          %{username: current_user.email |> String.split("@") |> hd()},
+          meta
+        )
+      )
+  end
 end

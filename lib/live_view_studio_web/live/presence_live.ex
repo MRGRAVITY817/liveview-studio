@@ -8,13 +8,7 @@ defmodule LiveViewStudioWeb.PresenceLive do
     %{current_user: current_user} = socket.assigns
 
     if connected?(socket) do
-      Phoenix.PubSub.subscribe(LiveViewStudio.PubSub, @topic)
-      # track current process(= user)
-      {:ok, _} =
-        Presence.track(self(), @topic, current_user.id, %{
-          username: current_user.email |> String.split("@") |> hd(),
-          is_playing: false
-        })
+      Presence.track_user(current_user, @topic, %{is_playing: false})
     end
 
     presences = Presence.list(@topic)
@@ -38,7 +32,9 @@ defmodule LiveViewStudioWeb.PresenceLive do
 
   def render(assigns) do
     ~H"""
-    <pre><%= inspect(@diff, pretty: true) %></pre>
+    <pre>
+    <%!-- <%= inspect(@diff, pretty: true) %> --%>
+    </pre>
     <div id="presence">
       <div class="users">
         <h2>Who's Here?</h2>
