@@ -84,15 +84,16 @@ defmodule LiveViewStudioWeb.PresenceLive do
   end
 
   defp remove_presences(socket, leaves) do
-    user_ids = Enum.map(leaves, fn {user_id, _} -> user_id end)
-
-    presences = Map.drop(socket.assigns.presences, user_ids)
-
-    assign(socket, :presences, presences)
+    simple_presence_map(leaves)
+    |> Enum.reduce(socket, fn {user_id, _}, socket ->
+      update(socket, :presences, &Map.delete(&1, user_id))
+    end)
   end
 
   defp add_presences(socket, joins) do
-    presences = Map.merge(socket.assigns.presences, simple_presence_map(joins))
-    assign(socket, :presences, presences)
+    simple_presence_map(joins)
+    |> Enum.reduce(socket, fn {user_id, meta}, socket ->
+      update(socket, :presences, &Map.put(&1, user_id, meta))
+    end)
   end
 end
