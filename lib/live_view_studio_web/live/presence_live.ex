@@ -11,23 +11,13 @@ defmodule LiveViewStudioWeb.PresenceLive do
       Presence.track_user(current_user, @topic, %{is_playing: false})
     end
 
-    presences = Presence.list(@topic)
-
     socket =
       socket
       |> assign(:is_playing, false)
-      |> assign(:presences, simple_presence_map(presences))
+      |> assign(:presences, Presence.list_users(@topic))
       |> assign(:diff, nil)
 
     {:ok, socket}
-  end
-
-  def simple_presence_map(presences) do
-    Enum.into(
-      presences,
-      %{},
-      fn {user_id, %{metas: [meta | _]}} -> {user_id, meta} end
-    )
   end
 
   def render(assigns) do
@@ -72,25 +62,6 @@ defmodule LiveViewStudioWeb.PresenceLive do
 
   # presence_diff contains the change of joins/leaves in presence
   def handle_info(%{event: "presence_diff", payload: diff}, socket) do
-    socket =
-      socket
-      |> remove_presences(diff.leaves)
-      |> add_presences(diff.joins)
-
-    {:noreply, socket}
-  end
-
-  defp remove_presences(socket, leaves) do
-    simple_presence_map(leaves)
-    |> Enum.reduce(socket, fn {user_id, _}, socket ->
-      update(socket, :presences, &Map.delete(&1, user_id))
-    end)
-  end
-
-  defp add_presences(socket, joins) do
-    simple_presence_map(joins)
-    |> Enum.reduce(socket, fn {user_id, meta}, socket ->
-      update(socket, :presences, &Map.put(&1, user_id, meta))
-    end)
+    {:noreply, Presence.handle_diff(socket, diff)}
   end
 end
