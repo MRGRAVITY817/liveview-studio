@@ -5,6 +5,7 @@
       :if={Enum.count(@cart) > 0}
       phx-click={toggle_cart()}
       id="cart-button"
+      phx-mounted={JS.transition("shake", time: 300)}
     >
       <.icon name="hero-shopping-cart" />
       <span class="count">
@@ -22,6 +23,15 @@
         <%= product.name %>
       </div>
       <button phx-click="add-product" phx-value-product={product.image}>
+        Add
+      </button>
+      <button
+        phx-click={
+          JS.push("add-product", value: %{product: product.image})
+          |> JS.transition("shake", to: "#cart-button", time: 500)
+        }
+        phx-value-product={product.image}
+      >
         Add
       </button>
     </div>
