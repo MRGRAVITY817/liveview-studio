@@ -3,7 +3,7 @@
   <div class="nav">
     <button
       :if={Enum.count(@cart) > 0}
-      phx-click={JS.toggle(to: "#cart") |> JS.toggle(to: "#backdrop")}
+      phx-click={toggle_cart()}
       id="cart-button"
     >
       <.icon name="hero-shopping-cart" />
@@ -33,7 +33,7 @@
     <div class="content">
       <div class="header">
         <h2>Shopping Cart</h2>
-        <button phx-click={JS.toggle(to: "#cart")}>
+        <button phx-click={toggle_cart()}>
           <.icon name="hero-x-mark" />
         </button>
       </div>
