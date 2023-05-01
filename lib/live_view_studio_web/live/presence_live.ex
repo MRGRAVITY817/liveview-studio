@@ -86,5 +86,7 @@ defmodule LiveViewStudioWeb.PresenceLive do
   end
 
   defp add_presences(socket, joins) do
+    presences = Map.merge(socket.assigns.presences, simple_presence_map(joins))
+    assign(socket, :presences, presences)
   end
 end
