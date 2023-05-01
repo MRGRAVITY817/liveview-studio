@@ -60,11 +60,12 @@ defmodule LiveViewStudioWeb.PresenceLive do
 
   def handle_event("toggle-playing", _, socket) do
     socket = update(socket, :is_playing, fn playing -> !playing end)
-    %{current_user: current_user} = socket.assigns
-    %{metas: [meta | _]} = Presence.get_by_key(@topic, current_user.id)
-    new_meta = %{meta | is_playing: socket.assigns.is_playing}
 
-    Presence.update(self(), @topic, current_user.id, new_meta)
+    Presence.update_user(
+      socket.assigns.current_user,
+      @topic,
+      %{is_playing: socket.assigns.is_playing}
+    )
 
     {:noreply, socket}
   end
