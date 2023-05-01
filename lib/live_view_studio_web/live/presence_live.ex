@@ -8,6 +8,7 @@ defmodule LiveViewStudioWeb.PresenceLive do
     %{current_user: current_user} = socket.assigns
 
     if connected?(socket) do
+      Phoenix.PubSub.subscribe(LiveViewStudio.PubSub, @topic)
       # track current process(= user)
       {:ok, _} =
         Presence.track(self(), @topic, current_user.id, %{
@@ -22,6 +23,7 @@ defmodule LiveViewStudioWeb.PresenceLive do
       socket
       |> assign(:is_playing, false)
       |> assign(:presences, simple_presence_map(presences))
+      |> assign(:diff, nil)
 
     {:ok, socket}
   end
@@ -36,6 +38,7 @@ defmodule LiveViewStudioWeb.PresenceLive do
 
   def render(assigns) do
     ~H"""
+    <pre><%= inspect(@diff, pretty: true) %></pre>
     <div id="presence">
       <div class="users">
         <h2>Who's Here?</h2>
@@ -62,5 +65,26 @@ defmodule LiveViewStudioWeb.PresenceLive do
   def handle_event("toggle-playing", _, socket) do
     socket = update(socket, :is_playing, fn playing -> !playing end)
     {:noreply, socket}
+  end
+
+  # presence_diff contains the change of joins/leaves in presence
+  def handle_info(%{event: "presence_diff", payload: diff}, socket) do
+    socket =
+      socket
+      |> remove_presences(diff.leaves)
+      |> add_presences(diff.joins)
+
+    {:noreply, socket}
+  end
+
+  defp remove_presences(socket, leaves) do
+    user_ids = Enum.map(leaves, fn {user_id, _} -> user_id end)
+
+    presences = Map.drop(socket.assigns.presences, user_ids)
+
+    assign(socket, :presences, presences)
+  end
+
+  defp add_presences(socket, joins) do
   end
 end
