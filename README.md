@@ -20,6 +20,20 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## What I learned
 
+### Presence
+
+[`Phoenix.Presence`](https://hexdocs.pm/phoenix/Phoenix.Presence.html) module provides very handy APIs to track/update/etc... with user presences. 
+Think about Discord sidebar UI that shows who's currently online in the server.  
+
+It's a genserver and not provided by default, so you have to add it with command `mix phx.gen.presence`.  
+
+Here's methods that I've used from Presence module:
+- `track(pid, topic, key, meta)`: Track an arbitrary process as a presence.
+- `update(socket, key, meta)`: Update a channel presence's metadata.
+
+** `(pid, topic) = (socket)`
+
+
 ### JS commands
 
 There are many reasons to use [JS commands](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.JS.html), 
