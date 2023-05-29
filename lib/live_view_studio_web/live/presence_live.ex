@@ -27,8 +27,13 @@ defmodule LiveViewStudioWeb.PresenceLive do
     </pre>
     <div id="presence">
       <div class="users">
-        <h2>Who's Here?</h2>
-        <ul>
+        <h2>
+          Who's Here?
+          <button phx-click={toggle_presence_list()}>
+            <.icon name="hero-list-bullet-solid" />
+          </button>
+        </h2>
+        <ul id="presences">
           <li :for={{_user_id, meta} <- @presences}>
             <span>
               <%= if meta.is_playing, do: "👀", else: "🙈" %>
@@ -46,6 +51,10 @@ defmodule LiveViewStudioWeb.PresenceLive do
       </div>
     </div>
     """
+  end
+
+  def toggle_presence_list(js \\ %JS{}) do
+    js |> JS.toggle(to: "#presences")
   end
 
   def handle_event("toggle-playing", _, socket) do
