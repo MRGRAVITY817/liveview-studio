@@ -26,10 +26,7 @@
         Add
       </button>
       <button
-        phx-click={
-          JS.push("add-product", value: %{product: product.image})
-          |> JS.transition("shake", to: "#cart-button", time: 500)
-        }
+        phx-click={add_product(product)}
         phx-value-product={product.image}
       >
         Add
