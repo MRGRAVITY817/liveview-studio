@@ -29,7 +29,7 @@ defmodule LiveViewStudioWeb.PresenceLive do
       <div class="users">
         <h2>
           Who's Here?
-          <button phx-click={toggle_presence_list()}>
+          <button phx-click={toggle_presences()}>
             <.icon name="hero-list-bullet-solid" />
           </button>
         </h2>
@@ -53,8 +53,11 @@ defmodule LiveViewStudioWeb.PresenceLive do
     """
   end
 
-  def toggle_presence_list(js \\ %JS{}) do
-    js |> JS.toggle(to: "#presences")
+  def toggle_presences(js \\ %JS{}) do
+    js
+    |> JS.toggle(to: "#presences")
+    |> JS.remove_class("bg-slate-400", to: ".hero-list-bullet-solid.bg-slate-400")
+    |> JS.add_class("bg-slate-400", to: ".hero-list-bullet-solid:not(.bg-slate-400)")
   end
 
   def handle_event("toggle-playing", _, socket) do
