@@ -16,11 +16,14 @@ defmodule LiveViewStudioWeb.BookingsLive do
     ~H"""
     <h1>Bookings</h1>
     <div id="bookings">
-      <div
-        id="booking-calendar"
-        phx-hook="Calendar"
-        data-unavailable-dates={Jason.encode!(@bookings)}
-      >
+      <%!-- `phx-update="ignore"` will ask DOM to ignore this part when rerendering --%>
+      <div phx-update="ignore" id="wrapper">
+        <div
+          id="booking-calendar"
+          phx-hook="Calendar"
+          data-unavailable-dates={Jason.encode!(@bookings)}
+        >
+        </div>
       </div>
       <div :if={@selected_dates} class="details">
         <div>
@@ -55,6 +58,16 @@ defmodule LiveViewStudioWeb.BookingsLive do
       |> assign(:selected_dates, nil)
 
     {:noreply, socket}
+  end
+
+  def handle_event("dates-picked", [from, to], socket) do
+    {:noreply,
+     assign(socket,
+       selected_dates: %{
+         from: parse_date(from),
+         to: parse_date(to)
+       }
+     )}
   end
 
   def format_date(date) do

@@ -54,3 +54,22 @@ Here are the most commonly used ones:
         Add
       </button>
 ```
+
+### `phx-update` attribute
+
+- `phx-update="ignore"`: will ask DOM to ignore this part when rerendering
+
+### Add JS hooks
+
+We can use JS libraries, by configuring `hooks` in `app.js` file.
+
+```js
+// ...
+
+let liveSocket = new LiveSocket("/live", Socket, {
+  params: { _csrf_token: csrfToken },
+  hooks: Hooks, 
+})
+
+// ...
+```
