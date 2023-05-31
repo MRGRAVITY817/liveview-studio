@@ -32,6 +32,7 @@ Hooks.Calendar = {
       inline: true,
       mode: "range",
       showMonths: 2,
+      disable: JSON.parse(this.el.dataset.unavailableDates),
     })
   },
 
