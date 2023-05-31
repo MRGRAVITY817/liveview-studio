@@ -22,9 +22,6 @@ defmodule LiveViewStudioWeb.PresenceLive do
 
   def render(assigns) do
     ~H"""
-    <pre>
-    <%!-- <%= inspect(@diff, pretty: true) %> --%>
-    </pre>
     <div id="presence">
       <div class="users">
         <h2>
