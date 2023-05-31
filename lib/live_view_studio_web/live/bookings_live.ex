@@ -56,8 +56,13 @@ defmodule LiveViewStudioWeb.BookingsLive do
       socket
       |> assign(:bookings, [selected_dates | bookings])
       |> assign(:selected_dates, nil)
+      |> push_event("add-unavailable-dates", selected_dates)
 
     {:noreply, socket}
+  end
+
+  def handle_event("unavailable-dates", _, socket) do
+    {:reply, %{dates: socket.assigns.bookings}, socket}
   end
 
   def handle_event("dates-picked", [from, to], socket) do
