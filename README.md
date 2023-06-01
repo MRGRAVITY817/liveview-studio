@@ -57,7 +57,11 @@ Here are the most commonly used ones:
 
 ### `phx-update` attribute
 
-- `phx-update="ignore"`: will ask DOM to ignore this part when rerendering
+- `replace`: (default) Replaces the element with the contents
+- `ignore`: will ask DOM to ignore this part when rerendering
+- `stream`: supports stream operations. Streams are used to manage large collections in the UI without having to store the collection on the server
+  
+More in [here](https://hexdocs.pm/phoenix_live_view/dom-patching.html).
 
 ### Add JS hooks
 
