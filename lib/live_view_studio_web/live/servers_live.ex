@@ -71,7 +71,7 @@ defmodule LiveViewStudioWeb.ServersLive do
           <%= if @live_action == :new do %>
             <.live_component module={ServerFormComponent} id="new" />
           <% else %>
-            <.server server={@selected_server} />
+            <.server server={@selected_server} socket={@socket} />
           <% end %>
           <div class="links">
             <.link navigate={~p"/light"}>
@@ -85,19 +85,31 @@ defmodule LiveViewStudioWeb.ServersLive do
   end
 
   attr :server, :map, required: true
+  attr :socket, :map, required: true
 
   def server(assigns) do
     ~H"""
     <div class="server">
       <div class="header">
         <h2><%= @server.name %></h2>
-        <button
-          class={@server.status}
-          phx-click="toggle-status"
-          phx-value-id={@server.id}
-        >
-          <%= @server.status %>
-        </button>
+        <div class="flex item-center justify-around">
+          <button
+            class={@server.status}
+            phx-click="toggle-status"
+            phx-value-id={@server.id}
+          >
+            <%= @server.status %>
+          </button>
+          <a
+            id={"#{@server.id}-clipboard"}
+            data-content={url(@socket, ~p"/servers/?id=#{@server}")}
+            phx-hook="Clipboard"
+            class="ml-4 text-sm bg-gray-300 py-1 px-3
+            rounded-full font-medium text-gray-700 cursor-pointer"
+          >
+            Copy Link
+          </a>
+        </div>
       </div>
       <div class="body">
         <div class="row">
