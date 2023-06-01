@@ -1,6 +1,7 @@
 import flatpickr from "../vendor/flatpickr"
+import { AsYouType } from "../vendor/libphonenumber-js.min"
 
-// Calendar Hook
+// Calendar
 const Calendar = {
   mounted() {
     this.pickr = flatpickr(this.el, {
@@ -27,4 +28,13 @@ const Calendar = {
   },
 }
 
-export default { Calendar }
+// Phone Number Formatter
+const PhoneNumber = {
+  mounted() {
+    this.el.addEventListener("input", (e) => {
+      this.el.value = new AsYouType("US").input(this.el.value)
+    })
+  },
+}
+
+export default { Calendar, PhoneNumber }
