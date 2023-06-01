@@ -66,6 +66,17 @@ We can use JS libraries, by configuring `hooks` in `app.js` file.
 ```js
 // ...
 
+const Hooks = {
+  CustomHook: {
+    mounted() {
+      const hookedElement = this.el
+      // Use JS libraries 
+      // or
+      // Do some valid JS stuffs like using clipboard!
+    }
+  }
+}
+
 let liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken },
   hooks: Hooks, 
@@ -73,3 +84,25 @@ let liveSocket = new LiveSocket("/live", Socket, {
 
 // ...
 ```
+
+Then _hook_ the liveview DOM element, using `phx-hook` attribute.
+
+```html
+<div phx-update="ignore" id="wrapper">
+  <div
+    id="custom-hook-id"
+    phx-hook="CustomHook"    
+  >
+  </div>
+</div>
+```
+
+`mounted()` callback is one of the _life-cycle callbacks_.   
+Here's the [full list](https://hexdocs.pm/phoenix_live_view/js-interop.html#client-hooks-via-phx-hook) of them.
+
+* `mounted` - the element has been added to the DOM and its server LiveView has finished mounting
+* `beforeUpdate` - the element is about to be updated in the DOM. Note: any call here must be synchronous as the operation cannot be deferred or cancelled.
+* `updated` - the element has been updated in the DOM by the server
+* `destroyed` - the element has been removed from the page, either by a parent update, or by the parent being removed entirely
+* `disconnected` - the element's parent LiveView has disconnected from the server
+* `reconnected` - the element's parent LiveView has reconnected to the server
