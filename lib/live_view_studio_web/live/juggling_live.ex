@@ -31,7 +31,12 @@ defmodule LiveViewStudioWeb.JugglingLive do
           <%= Enum.at(@images, @current) %>
         </div>
 
-        <input type="number" value={@current} />
+        <input
+          type="number"
+          value={@current}
+          phx-keyup="set-current"
+          phx-key="Enter"
+        />
 
         <button phx-click="toggle-playing">
           <%= if @is_playing, do: "Pause", else: "Play" %>
@@ -39,6 +44,10 @@ defmodule LiveViewStudioWeb.JugglingLive do
       </div>
     </div>
     """
+  end
+
+  def handle_event("set-current", %{"key" => "Enter", "value" => value}, socket) do
+    {:noreply, assign(socket, :current, String.to_integer(value))}
   end
 
   def handle_event("update", %{"key" => "k"}, socket) do
