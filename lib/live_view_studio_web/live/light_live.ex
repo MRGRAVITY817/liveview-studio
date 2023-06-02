@@ -21,7 +21,7 @@ defmodule LiveViewStudioWeb.LightLive do
     # assigns.brightness == @brightness (syntactic sugar)
     ~H"""
     <h1>Front Porch Light</h1>
-    <div id="light">
+    <div id="light" phx-window-keyup="change-brightness">
       <div class="meter">
         <span style={"
           width: #{@brightness}%;
@@ -76,6 +76,14 @@ defmodule LiveViewStudioWeb.LightLive do
       </div>
     </div>
     """
+  end
+
+  def handle_event("change-brightness", %{"key" => "ArrowUp"}, socket) do
+    {:noreply, update(socket, :brightness, &min(&1 + 10, 100))}
+  end
+
+  def handle_event("change-brightness", %{"key" => "ArrowDown"}, socket) do
+    {:noreply, update(socket, :brightness, &max(&1 - 10, 0))}
   end
 
   # Pattern matching for `handle_event` from `phx-click` binding
