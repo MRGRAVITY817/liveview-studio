@@ -78,12 +78,24 @@ defmodule LiveViewStudioWeb.LightLive do
     """
   end
 
+  defp brightness_up(socket) do
+    update(socket, :brightness, &min(&1 + 10, 100))
+  end
+
+  defp brightness_down(socket) do
+    update(socket, :brightness, &max(&1 - 10, 0))
+  end
+
   def handle_event("change-brightness", %{"key" => "ArrowUp"}, socket) do
-    {:noreply, update(socket, :brightness, &min(&1 + 10, 100))}
+    {:noreply, brightness_up(socket)}
   end
 
   def handle_event("change-brightness", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, update(socket, :brightness, &max(&1 - 10, 0))}
+    {:noreply, brightness_down(socket)}
+  end
+
+  def handle_event("change-brightness", _, socket) do
+    {:noreply, socket}
   end
 
   # Pattern matching for `handle_event` from `phx-click` binding
