@@ -19,7 +19,7 @@ defmodule LiveViewStudioWeb.JugglingLive do
   def render(assigns) do
     ~H"""
     <h1>Juggling Key Events</h1>
-    <div id="juggling">
+    <div id="juggling" phx-window-keyup="update">
       <div class="legend">
         k = play/pause, &larr; = previous, &rarr; = next
       </div>
@@ -39,6 +39,10 @@ defmodule LiveViewStudioWeb.JugglingLive do
       </div>
     </div>
     """
+  end
+
+  def handle_event("update", %{"key" => "k"}, socket) do
+    {:noreply, toggle_playing(socket)}
   end
 
   def handle_event("toggle-playing", _, socket) do
