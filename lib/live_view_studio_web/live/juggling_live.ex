@@ -45,6 +45,14 @@ defmodule LiveViewStudioWeb.JugglingLive do
     {:noreply, toggle_playing(socket)}
   end
 
+  def handle_event("update", %{"key" => "ArrowRight"}, socket) do
+    {:noreply, assign(socket, :current, next(socket))}
+  end
+
+  def handle_event("update", %{"key" => "ArrowLeft"}, socket) do
+    {:noreply, assign(socket, :current, previous(socket))}
+  end
+
   def handle_event("toggle-playing", _, socket) do
     {:noreply, toggle_playing(socket)}
   end
