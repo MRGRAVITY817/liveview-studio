@@ -156,3 +156,10 @@ def handle_event("an-event", %{"key" => key, "shiftKey" => shiftKey}, socket) do
   {:noreply, socket}
 end
 ```
+
+### `phx-throttle`
+Similar to `phx-debounce`, yet it first emits the event and then limits the rate. Useful when user is pressing down the key, and we don't want event to be emitted to quickly.
+
+```html
+<div id="donations" phx-window-keydown="paginate" phx-throttle="200">
+```
