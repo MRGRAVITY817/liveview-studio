@@ -53,6 +53,10 @@ defmodule LiveViewStudioWeb.JugglingLive do
     {:noreply, assign(socket, :current, previous(socket))}
   end
 
+  def handle_event("update", _, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("toggle-playing", _, socket) do
     {:noreply, toggle_playing(socket)}
   end
