@@ -110,3 +110,49 @@ Here's the [full list](https://hexdocs.pm/phoenix_live_view/js-interop.html#clie
 * `destroyed` - the element has been removed from the page, either by a parent update, or by the parent being removed entirely
 * `disconnected` - the element's parent LiveView has disconnected from the server
 * `reconnected` - the element's parent LiveView has reconnected to the server
+
+### Key events
+
+```html
+  <input
+    type="number"
+    value={@current}
+    phx-keyup="set-current"
+    phx-key="Enter"
+  />
+```
+
+This will send the `value` to `set-current` event, only when `Enter` key is pressed
+
+
+```html
+  <div id="juggling" phx-window-keyup="update">
+```
+
+This will listen to all the key up events.
+
+### Using `metadata` field in `LiveSocket` to extend event property
+
+By adding this code in `app.js`,
+
+```javascript
+let liveSocket = new LiveSocket("/live", Socket, {
+  // ...
+  metadata: {
+    keydown: (e, el) => {
+      return {
+        key: e.key,
+        shiftKey: e.shiftKey
+      }
+    }
+  }
+});
+```
+
+We can now get `shift key` event from `phx-keydown`.
+
+```elixir
+def handle_event("an-event", %{"key" => key, "shiftKey" => shiftKey}, socket) do
+  {:noreply, socket}
+end
+```
