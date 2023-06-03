@@ -10,6 +10,10 @@
 
     <.live_file_input upload={@uploads.photos} />
 
+    <.error :for={err <- upload_errors(@uploads.photos)}>
+      <%= Phoenix.Naming.humanize(err) %>
+    </.error>
+
     <div class="entry" :for={entry <- @uploads.photos.entries}>
       <.live_img_preview entry={entry}  />
 
@@ -20,6 +24,9 @@
         <div class="bar">
           <span style={"width: #{entry.progress}%"}></span>
         </div>
+        <.error :for={err <- upload_errors(@uploads.photos, entry)}>
+          <%= Phoenix.Naming.humanize(err) %>
+        </.error>
       </div>
     </div>
 
