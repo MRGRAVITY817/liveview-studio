@@ -51,6 +51,9 @@ defmodule LiveViewStudioWeb.DesksLive do
             "#{entry.uuid}-#{entry.client_name}"
           ])
 
+        # Create the dir when not present
+        File.mkdir_p!(Path.dirname(dest))
+
         File.cp!(meta.path, dest)
 
         url_path = static_path(socket, "/uploads/#{Path.basename(dest)}")
