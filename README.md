@@ -163,3 +163,13 @@ Similar to `phx-debounce`, yet it first emits the event and then limits the rate
 ```html
 <div id="donations" phx-window-keydown="paginate" phx-throttle="200">
 ```
+
+### Image Preview
+
+It's easy to show image preview for uploading image - use `.live_img_preview`.   
+
+(`width` attribute is mandatory, like Next.js Image component)
+
+```html
+<.live_img_preview entry={entry} width="75"> <>
+```
