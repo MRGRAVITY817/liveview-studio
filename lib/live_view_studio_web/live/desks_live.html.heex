@@ -3,6 +3,13 @@
   <.form for={@form} phx-submit="save" phx-change="validate">
     <.input field={@form[:name]} placeholder="Name" />
 
+    <%= inspect(@uploads.photos) %>
+    <div class="hint">Add up to <%= @uploads.photos.max_entries %> photos 
+    (max <%= trunc(@uploads.photos.max_file_size / 1_000_000) %> MB each)
+    </div>
+
+    <.live_file_input upload={@uploads.photos} />
+
     <.button phx-disable-with="Uploading...">
       Upload
     </.button>

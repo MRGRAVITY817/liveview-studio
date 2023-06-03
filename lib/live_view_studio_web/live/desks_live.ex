@@ -12,6 +12,15 @@ defmodule LiveViewStudioWeb.DesksLive do
         form: to_form(Desks.change_desk(%Desk{}))
       )
 
+    socket =
+      allow_upload(
+        socket,
+        :photos,
+        accept: ~w(.png .jpeg .jpg),
+        max_entries: 3,
+        max_file_size: 10_000_000
+      )
+
     {:ok, stream(socket, :desks, Desks.list_desks())}
   end
 
