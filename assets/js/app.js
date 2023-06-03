@@ -22,6 +22,7 @@ import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import hooks from "./hooks"
+import Uploaders from "./uploaders"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
@@ -31,6 +32,7 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 const liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken, timezone },
   hooks,
+  uploaders: Uploaders,
 })
 
 // Show progress bar on live navigation and form submits
