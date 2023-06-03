@@ -24,6 +24,10 @@ defmodule LiveViewStudioWeb.DesksLive do
     {:ok, stream(socket, :desks, Desks.list_desks())}
   end
 
+  def handle_event("cancel", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :photos, ref)}
+  end
+
   def handle_event("validate", %{"desk" => params}, socket) do
     changeset =
       %Desk{}

@@ -28,6 +28,10 @@
           <%= Phoenix.Naming.humanize(err) %>
         </.error>
       </div>
+
+      <a phx-click="cancel" phx-value-ref={entry.ref}>
+        &times;
+      </a>
     </div>
 
     <.button phx-disable-with="Uploading...">
