@@ -1,5 +1,4 @@
 # LiveViewStudio
-
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
@@ -163,6 +162,23 @@ Similar to `phx-debounce`, yet it first emits the event and then limits the rate
 ```html
 <div id="donations" phx-window-keydown="paginate" phx-throttle="200">
 ```
+
+### Image input & Drag and Drop
+
+LiveView provides a helper component called `live_file_input`.
+
+```html
+<.live_file_input upload={@uploads.photos} />
+```
+
+Wanna support drag and drop? Wrap with div element that has `phx-drop-target` attribute.
+
+```html
+<div class="drop" phx-drop-target={@uploads.photos.ref}>
+  <.live_file_input upload={@uploads.photos} />
+</div>
+```
+
 
 ### Image Preview
 
