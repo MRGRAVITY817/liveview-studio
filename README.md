@@ -179,7 +179,6 @@ Wanna support drag and drop? Wrap with div element that has `phx-drop-target` at
 </div>
 ```
 
-
 ### Image Preview
 
 It's easy to show image preview for uploading image - use `.live_img_preview`.   
@@ -188,4 +187,29 @@ It's easy to show image preview for uploading image - use `.live_img_preview`.
 
 ```html
 <.live_img_preview entry={entry} width="75"> <>
+```
+
+### How do we handle with _ready-to-upload_ files?
+
+First of all, those kind of files are called _Entries_ in Phoenix.  
+
+`consume_uploaded_entry` function will _consume(upload to server, cloud storage, etc)_ the entries that are still in progress (living in browser).  
+
+```elixir
+photo_locations =
+  consume_uploaded_entries(socket, :photos, fn meta, entry ->
+    dest =
+      Path.join([
+        "priv",
+        "static",
+        "uploads",
+        "#{entry.uuid}-#{entry.client_name}"
+      ])
+
+    File.cp!(meta.path, dest)
+
+    url_path = static_path(socket, "/uploads/#{Path.basename(dest)}")
+
+    {:ok, url_path}
+  end)
 ```
